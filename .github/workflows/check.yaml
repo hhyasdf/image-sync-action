@@ -1,0 +1,36 @@
+name: check
+
+on:
+  push: {}
+  pull_request: {}
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.event.after }}
+  cancel-in-progress: true
+
+jobs:
+  shellcheck:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: ludeeus/action-shellcheck@1.1.0
+        env:
+          SHELLCHECK_OPTS: -e SC2236,SC2162,SC2268
+        with:
+          ignore: tests
+
+  super-linter:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Lint Code Base
+        uses: github/super-linter@v4.5.1
+        env:
+          VALIDATE_ALL_CODEBASE: true
+          VALIDATE_MARKDOWN: true
+          LINTER_RULES_PATH: .github
+          MARKDOWN_CONFIG_FILE: .markdown-lint.yml
+          VALIDATE_MD: true
+          DEFAULT_BRANCH: main
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          FILTER_REGEX_EXCLUDE: .github/.*

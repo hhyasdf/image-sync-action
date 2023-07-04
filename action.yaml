@@ -1,0 +1,43 @@
+name: "Image Sync Action"
+description: "Automatically sync conatiner images between registries through Github Action"
+inputs:
+  version:
+    description: "The version of image-syncer"
+    default: "latest"
+    required: false
+  auth_file:
+    description: "The --auth parameter of image-syncer, auth file path. This flag need to be pair used with --images"
+    required: false
+  images_file:
+    description: "The --images parameter of image-syncer, images file path. This flag need to be pair used with --auth"
+    default: "./images.yaml"
+    required: true
+  default_namespace:
+    description: "The --namespace parameter of image-syncer, default destination namespace when destination namespace is not given in the config file, can also be set with DEFAULT_NAMESPACE environment value"
+    required: false
+  default_registry:
+    description: "The --registry parameter of image-syncer, default destination registry url when destination registry is not given in the config file, can also be set with DEFAULT_REGISTRY environment value"
+    required: false
+  arch:
+    description: "The --arch parameter of image-syncer, architecture list to filter source tags, not works for OCI media"
+    required: false
+  os:
+    description: "The --os parameter of image-syncer, os list to filter source tags, not works for docker v2 schema1 and OCI media"
+    required: false
+  proc:
+    description: "The --proc parameter of image-syncer, numbers of working goroutines (default 5)"
+    default: 5
+    required: false
+  retries:
+    description: "The --retries parameter of image-syncer, times to retry failed task (default 2)"
+    default: 2
+    required: false
+runs:
+  using: "composite"
+  steps:
+    - id: download
+      run: ${{ github.action_path }}/download.sh ${{ inputs.version }}
+      shell: bash
+    - id: excute
+      run: ./image-syncer --auth=${{ inputs.auth_file }} --images=${{ inputs.images_file }} --namespace=${{ inputs.default_namespace }} --registry=${{ inputs.default_registry }} --arch=${{ inputs.arch }} --os=${{ inputs.os }} --proc=${{ inputs.proc }} --retries=${{ inputs.retries }}
+      shell: bash

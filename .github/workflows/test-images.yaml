@@ -1,0 +1,1 @@
+quay.io/operator-framework/olm:v0.18.3: "localhost:5000/image-syncer-test/olm"

@@ -1,0 +1,24 @@
+name: autotest
+
+on:
+  push: {}
+  pull_request: {}
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.event.after }}
+  cancel-in-progress: true
+
+jobs:
+  test_sync_job:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Run docker registry
+        run: docker run -d -p 5000:5000 --restart=always --name registry registry:2
+      - uses: ./
+        with:
+          auth_file: ./.github/workflows/test-auth.yaml
+          images_file: ./.github/workflows//test-images.yaml
+        env:
+          TEST_PASSWORD: ${{ secrets.TEST_PASSWORD }}
