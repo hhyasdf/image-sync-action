@@ -11,8 +11,8 @@
   uses: actions/checkout@v3
 - uses: hhyasdf/image-sync-action@v1
   with:
-    auth_file: ./test-auth.yaml # The auth information file of registries, optional.
-    images_file: ./test-images.yaml # The images need to sync, always needed.
+    auth_file: ./auth.yaml # The auth information file of registries, optional.
+    images_file: ./images.yaml # The images file descirbes which images need to sync, always needed.
     version: latest # The version of image-syncer, use the latest version if not specified.
     proc: 6 # The max number of goroutines to sync images, default value is 5.
   env:
