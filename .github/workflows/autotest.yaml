@@ -18,7 +18,7 @@ jobs:
         run: docker run -d -p 5000:5000 --restart=always --name registry registry:2
       - uses: ./
         with:
-          auth_file: ./.github/workflows/test-auth.yaml
-          images_file: ./.github/workflows//test-images.yaml
+          auth_file: ./.github/workflows/config/test-auth.yaml
+          images_file: ./.github/workflows/config/test-images.yaml
         env:
           TEST_PASSWORD: ${{ secrets.TEST_PASSWORD }}
