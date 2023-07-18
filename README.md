@@ -9,7 +9,7 @@
 ```yaml
 - name: Checkout
   uses: actions/checkout@v3
-- uses: hhyasdf/image-sync-action@v1
+- uses: hhyasdf/image-sync-action@v1.1
   with:
     auth_file: ./auth.yaml # The auth information file of registries, optional.
     images_file: ./images.yaml # The images file descirbes which images need to sync, always needed.
